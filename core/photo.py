@@ -9,6 +9,27 @@ target_images_dir_name = ''
 template_image_dir_name_default = 'Template_images'
 target_images_dir_name_default = 'images'
 
+# Dictionary for number of images for each resolution
+# The numbers have been arbitrarily chosen
+# Support is now till 6k images
+res_to_images = {0: [4, 3], 1: [5, 3], 2: [5, 3], 3: [6, 4], 4: [7, 5], 5: [8, 6], 6: [9, 7]}
+
+
+def get_template_width_and_height(src_size):
+    width, height = src_size
+    max_param = max(width, height)
+    res = round(max_param / 1000.0)
+    no_of_images = res_to_images[res]
+    if width > height:
+        templates_per_width = max(no_of_images)
+        templates_per_height = min(no_of_images)
+    else:
+        templates_per_width = min(no_of_images)
+        templates_per_height = max(no_of_images)
+    template_width = width // templates_per_width
+    template_height = height // templates_per_height
+    return template_width, template_height
+
 
 def template_images(temp_image):
     template_image_dir_path = os.path.join(os.getcwd(), template_image_dir_name)
